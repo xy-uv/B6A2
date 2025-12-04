@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
+import response from "./utils/response";
 
 const app: Application = express();
 
@@ -9,16 +10,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (_req: Request, res: Response) => {
-  res.status(200).json({
+  response(res, {
+    statusCode: 200,
     success: true,
-    message: "Server is Running for SERVE!!",
+    message: "Server is ready for SERVE!!",
   });
 });
 
 app.get("/health", (_req: Request, res: Response) => {
-  res.status(200).json({
+  response(res, {
+    statusCode: 200,
     success: true,
-    message: "Server health is Great!!",
+    message: "Server health is GREAT!!",
   });
 });
 
