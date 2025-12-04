@@ -2,8 +2,12 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import response from "./utils/response";
 import globalErrorHandler from "./middlewares/global_error_handler";
+import { initDB } from "./config/db";
 
 const app: Application = express();
+
+//? Database initialization
+initDB();
 
 //! Calling parser middleware
 app.use(cors());
