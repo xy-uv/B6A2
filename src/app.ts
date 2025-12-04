@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import response from "./utils/response";
+import globalErrorHandler from "./middlewares/global_error_handler";
 
 const app: Application = express();
 
@@ -25,12 +26,15 @@ app.get("/health", (_req: Request, res: Response) => {
   });
 });
 
+//! Calling global error handler
+app.use(globalErrorHandler);
+
 //! Handling 404-> not found route
 app.use((req: Request, res: Response) => {
   res.status(404).json({
     success: false,
     message: "Requested URL not found!!",
-    url: req.path,
+    errors: `${req.path} are't a valid url to request`,
   });
 });
 export default app;
