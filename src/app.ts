@@ -1,9 +1,9 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
-import response from "./utils/response";
 import globalErrorHandler from "./middlewares/global_error_handler";
 import { initDB } from "./config/db";
 import router from "./routes";
+import reply from "./utils/reply";
 
 const app: Application = express();
 
@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1", router);
 
 app.get("/", (_req: Request, res: Response) => {
-  response(res, {
+  reply(res, {
     statusCode: 200,
     success: true,
     message: "Server is ready for SERVE!!",
@@ -27,7 +27,7 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 app.get("/health", (_req: Request, res: Response) => {
-  response(res, {
+  reply(res, {
     statusCode: 200,
     success: true,
     message: "Server health is GREAT!!",

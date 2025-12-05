@@ -1,14 +1,14 @@
 import { Response } from "express";
 
-interface IResponse<T> {
+interface IReply<T> {
   statusCode: number;
   success: boolean;
   message: string;
   data?: T;
 }
 
-const response = <T>(res: Response, data: IResponse<T>): void => {
-  const resData: Partial<IResponse<T>> = {
+const reply = <T>(res: Response, data: IReply<T>): void => {
+  const resData: Partial<IReply<T>> = {
     success: data.success,
     message: data.message,
   };
@@ -18,4 +18,4 @@ const response = <T>(res: Response, data: IResponse<T>): void => {
   res.status(data.statusCode).json(resData);
 };
 
-export default response;
+export default reply;
