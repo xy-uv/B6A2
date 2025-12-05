@@ -36,4 +36,29 @@ const insert = async (payload: Record<string, unknown>) => {
   };
 };
 
-export const BookingsServices = { insert };
+const retrieves = async () => {
+  const result = await pool.query(`
+    SELECT
+    b.id,
+    b.customer_id,
+    b.vehicle_id,
+    b.rent_start_date,
+    b.rent_end_date,
+    b.total_price,
+    b.status,
+    json_build_object(
+        'name',  u.name,
+        'email', u.email
+    ) AS customer,
+    json_build_object(
+        'vehicle_name',        v.vehicle_name,
+        'registration_number', v.registration_number
+    ) AS vehicle
+    FROM bookings b
+    JOIN users    u ON u.id = b.customer_id
+    JOIN vehicles v ON v.id = b.vehicle_id
+    `);
+  return result;
+};
+
+export const BookingsServices = { insert, retrieves };
