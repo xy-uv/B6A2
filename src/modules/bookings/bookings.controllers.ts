@@ -6,8 +6,7 @@ const insert = asyncHandler(async (require, res) => {
   const result = await BookingsServices.insert(require.body);
   reply(res, {
     statusCode: 200,
-    success: true,
-    message: "OK",
+    message: "Booking inserted successfully",
     data: result,
   });
 });

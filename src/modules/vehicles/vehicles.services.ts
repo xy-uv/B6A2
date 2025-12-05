@@ -22,4 +22,12 @@ const insert = async (payload: Record<string, unknown>) => {
   return result;
 };
 
-export const VehiclesServices = { insert };
+const retrieves = async () => {
+  return await pool.query(`SELECT * FROM vehicles`);
+};
+
+const retrieve = async (id: string) => {
+  return await pool.query(`SELECT * FROM vehicles WHERE id=$1`, [id]);
+};
+
+export const VehiclesServices = { insert, retrieves, retrieve };

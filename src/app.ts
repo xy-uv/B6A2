@@ -21,7 +21,6 @@ app.use("/api/v1", router);
 app.get("/", (_req: Request, res: Response) => {
   reply(res, {
     statusCode: 200,
-    success: true,
     message: "Server is ready for SERVE!!",
   });
 });
@@ -29,7 +28,6 @@ app.get("/", (_req: Request, res: Response) => {
 app.get("/health", (_req: Request, res: Response) => {
   reply(res, {
     statusCode: 200,
-    success: true,
     message: "Server health is GREAT!!",
   });
 });

@@ -2,14 +2,14 @@ import { Response } from "express";
 
 interface IReply<T> {
   statusCode: number;
-  success: boolean;
+  success?: boolean;
   message: string;
   data?: T;
 }
 
 const reply = <T>(res: Response, data: IReply<T>): void => {
   const resData: Partial<IReply<T>> = {
-    success: data.success,
+    success: true,
     message: data.message,
   };
   if (data.data !== undefined) {

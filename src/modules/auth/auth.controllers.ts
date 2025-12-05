@@ -8,7 +8,6 @@ const insert = asyncHandler(async (req: Request, res: Response) => {
 
   reply(res, {
     statusCode: 201,
-    success: true,
     message: "User inserted successfully!!",
     data: result.rows[0],
   });
