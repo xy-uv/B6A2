@@ -16,7 +16,7 @@ const insert = async (payload: Record<string, unknown>) => {
     throw new AppError(400, "Vehicle not found!");
   }
   const vehicle = vehicleResult.rows[0];
-  const total_price = rented_day * vehicle.daily_rent_price;
+  const total_price = rented_day * Number(vehicle.daily_rent_price);
   if (total_price <= 0) {
     throw new AppError(
       400,
