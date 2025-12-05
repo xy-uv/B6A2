@@ -3,6 +3,7 @@ import cors from "cors";
 import response from "./utils/response";
 import globalErrorHandler from "./middlewares/global_error_handler";
 import { initDB } from "./config/db";
+import router from "./routes";
 
 const app: Application = express();
 
@@ -13,6 +14,9 @@ initDB();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//* Handling all existing routes
+app.use("/api/v1", router);
 
 app.get("/", (_req: Request, res: Response) => {
   response(res, {
