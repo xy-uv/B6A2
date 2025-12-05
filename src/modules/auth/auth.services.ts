@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import AppError from "../../utils/app_error";
 
 const insert = async (payload: Record<string, unknown>) => {
-  const { name, email, password, phone, role } = payload;
+  const { name, email, password, phone } = payload;
   let hashedPassword;
   if (typeof password === "string" && password.length >= 6) {
     hashedPassword = await bcrypt.hash(password as string, 11);
@@ -12,8 +12,8 @@ const insert = async (payload: Record<string, unknown>) => {
   }
 
   const result = await pool.query(
-    `INSERT INTO users(name,email,password,phone,role) VALUES($1,$2,$3,$4,$5) RETURNING *`,
-    [name, email, hashedPassword, phone, role]
+    `INSERT INTO users(name,email,password,phone) VALUES($1,$2,$3,$4) RETURNING *`,
+    [name, email, hashedPassword, phone]
   );
   return result;
 };
