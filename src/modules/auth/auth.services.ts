@@ -1,8 +1,10 @@
 import { pool } from "../../config/db";
 import bcrypt from "bcryptjs";
 import AppError from "../../utils/app_error";
+import { jwts } from "../../utils/jwts";
+import variables from "../../config";
 
-const insert = async (payload: Record<string, unknown>) => {
+const signup = async (payload: Record<string, unknown>) => {
   const { name, email, password, phone, role } = payload;
   let hashedPassword;
   if (typeof password === "string" && password.length >= 6) {
@@ -18,4 +20,32 @@ const insert = async (payload: Record<string, unknown>) => {
   return result;
 };
 
-export const AuthServices = { insert };
+const login = async (email: string, password: string) => {
+  const result = await pool.query(`SELECT * FROM users WHERE email=$1`, [
+    email,
+  ]);
+  if (result.rows.length === 0) {
+    throw new AppError(404, "User not found!");
+  }
+  const user = result.rows[0];
+  const isMatched = await bcrypt.compare(password, user.password);
+  if (!isMatched) {
+    throw new AppError(403, "Wrong Password!");
+  }
+  const token = jwts.create(
+    {
+      id: user?.id,
+      email: user?.email,
+      role: user?.role,
+    },
+    variables.jwt_secret,
+    variables.jwt_expires
+  );
+  // console.log(token);
+  return {
+    token,
+    user,
+  };
+};
+
+export const AuthServices = { signup, login };

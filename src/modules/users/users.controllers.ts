@@ -7,7 +7,7 @@ const retrieves = asyncHandler(async (req, res) => {
   reply(res, {
     statusCode: 200,
     message: "Users retrieved successfully",
-    data: result.rows[0],
+    data: result.rows,
   });
 });
 

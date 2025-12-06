@@ -3,8 +3,8 @@ import asyncHandler from "../../utils/async_handler";
 import reply from "../../utils/reply";
 import { AuthServices } from "./auth.services";
 
-const insert = asyncHandler(async (req: Request, res: Response) => {
-  const result = await AuthServices.insert(req.body);
+const signup = asyncHandler(async (req: Request, res: Response) => {
+  const result = await AuthServices.signup(req.body);
 
   reply(res, {
     statusCode: 201,
@@ -13,4 +13,10 @@ const insert = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export const AuthControllers = { insert };
+const login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  const result = await AuthServices.login(email, password);
+  reply(res, { statusCode: 200, message: "Login success", data: result });
+});
+
+export const AuthControllers = { signup, login };
