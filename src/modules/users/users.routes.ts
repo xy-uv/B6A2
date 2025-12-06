@@ -12,5 +12,5 @@ router.get(
   isOwnership(),
   UserControllers.retrieve
 );
-
+router.put("/:userId", UserControllers.modify);
 export const UserRouter = router;

@@ -1,4 +1,5 @@
 import { pool } from "../../config/db";
+import AppError from "../../utils/app_error";
 
 const insert = async (payload: Record<string, unknown>) => {
   const {
@@ -44,6 +45,9 @@ const retrieve = async (id: string) => {
 };
 
 const modify = async (id: string, payload: Record<string, unknown>) => {
+  if (payload === undefined) {
+    throw new AppError(400, "There was nothing to update!");
+  }
   const {
     vehicle_name,
     type,
@@ -60,7 +64,7 @@ const modify = async (id: string, payload: Record<string, unknown>) => {
     registration_number = COALESCE($3, registration_number),
     daily_rent_price    = COALESCE($4, daily_rent_price),
     availability_status = COALESCE($5, availability_status)
-    WHERE id = $6
+    WHERE id =$6
     RETURNING *;
     `,
     [

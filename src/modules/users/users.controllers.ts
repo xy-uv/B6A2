@@ -1,9 +1,8 @@
-import AppError from "../../utils/app_error";
 import asyncHandler from "../../utils/async_handler";
 import reply from "../../utils/reply";
 import { UsersServices } from "./users.services";
 
-const retrieves = asyncHandler(async (req, res) => {
+const retrieves = asyncHandler(async (_req, res) => {
   const result = await UsersServices.retrieves();
   reply(res, {
     statusCode: 200,
@@ -21,4 +20,13 @@ const retrieve = asyncHandler(async (req, res) => {
   });
 });
 
-export const UserControllers = { retrieves, retrieve };
+const modify = asyncHandler(async (req, res) => {
+  const result = await UsersServices.modify(req.params.userId!, req.body);
+  reply(res, {
+    statusCode: 200,
+    message: "User updated successfully",
+    data: result.rows[0],
+  });
+});
+
+export const UserControllers = { retrieves, retrieve, modify };
