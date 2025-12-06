@@ -1,3 +1,4 @@
+import AppError from "../../utils/app_error";
 import asyncHandler from "../../utils/async_handler";
 import reply from "../../utils/reply";
 import { VehiclesServices } from "./vehicles.services";
@@ -41,4 +42,18 @@ const modify = asyncHandler(async (req, res) => {
   });
 });
 
-export const VehiclesControllers = { insert, retrieves, retrieve, modify };
+const destroy = asyncHandler(async (req, res) => {
+  const result = await VehiclesServices.destroy(req.params.vehicleId!);
+  if (result.rowCount === 0) {
+    throw new AppError(404, "Vehicle not found!");
+  }
+  reply(res, { statusCode: 200, message: "Vehicle deleted successfully" });
+});
+
+export const VehiclesControllers = {
+  insert,
+  retrieves,
+  retrieve,
+  modify,
+  destroy,
+};

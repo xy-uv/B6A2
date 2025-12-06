@@ -15,7 +15,7 @@ const insert = async (payload: Record<string, unknown>) => {
   if (vehicleResult.rows.length == 0) {
     throw new AppError(400, "Vehicle not found!");
   }
-  const vehicle = vehicleResult.rows[0];
+  const vehicle = await vehicleResult.rows[0];
 
   if (vehicle.availability_status === "booked") {
     throw new AppError(400, "Vehicle already booked!");

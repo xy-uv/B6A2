@@ -41,7 +41,7 @@ const login = async (email: string, password: string) => {
   if (result.rows.length === 0) {
     throw new AppError(404, "User not found!");
   }
-  const user = result.rows[0];
+  const user = await result.rows[0];
   const isMatched = await bcrypt.compare(password, user.password);
   if (!isMatched) {
     throw new AppError(403, "Wrong Password!");

@@ -80,4 +80,23 @@ const modify = async (id: string, payload: Record<string, unknown>) => {
   return result;
 };
 
-export const VehiclesServices = { insert, retrieves, retrieve, modify };
+const destroy = async (id: string) => {
+  const bookingResult = await pool.query(
+    `SELECT * FROM bookings WHERE vehicle_id=$1`,
+    [id]
+  );
+  const booking = await bookingResult.rows[0];
+  if (booking?.status === "active") {
+    throw new AppError(403, "Vehicle had active booking!");
+  }
+  const result = await pool.query(`DELETE FROM vehicles WHERE id=$1`, [id]);
+  return result;
+};
+
+export const VehiclesServices = {
+  insert,
+  retrieves,
+  retrieve,
+  modify,
+  destroy,
+};
