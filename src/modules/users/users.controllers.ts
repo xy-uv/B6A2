@@ -1,3 +1,4 @@
+import AppError from "../../utils/app_error";
 import asyncHandler from "../../utils/async_handler";
 import reply from "../../utils/reply";
 import { UsersServices } from "./users.services";
@@ -29,4 +30,12 @@ const modify = asyncHandler(async (req, res) => {
   });
 });
 
-export const UserControllers = { retrieves, retrieve, modify };
+const destroy = asyncHandler(async (req, res) => {
+  const result = await UsersServices.destroy(req.params.userId!);
+  // if (result.rowCount === 0) {
+  //   throw new AppError(404, "User not found!");
+  // }
+  reply(res, { statusCode: 200, message: "User deleted successfully" });
+});
+
+export const UserControllers = { retrieves, retrieve, modify, destroy };

@@ -31,4 +31,19 @@ const modify = async (id: string, payload: Record<string, unknown>) => {
   return result;
 };
 
-export const UsersServices = { retrieves, retrieve, modify };
+const destroy = async (id: string) => {
+  const bookingResult = await pool.query(
+    `SELECT * FROM bookings WHERE customer_id=$1`,
+    [id]
+  );
+  const activeBookings = bookingResult.rows.filter(
+    (booking) => booking.status === "active"
+  );
+  if (activeBookings.length > 0) {
+    throw new AppError(403, "User had active booking!");
+  }
+  const result = await pool.query(`DELETE FROM users WHERE id=$1`, [id]);
+  return result;
+};
+
+export const UsersServices = { retrieves, retrieve, modify, destroy };

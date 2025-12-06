@@ -85,8 +85,10 @@ const destroy = async (id: string) => {
     `SELECT * FROM bookings WHERE vehicle_id=$1`,
     [id]
   );
-  const booking = await bookingResult.rows[0];
-  if (booking?.status === "active") {
+  const activeBookings = bookingResult.rows.filter(
+    (booking) => booking.status === "active"
+  );
+  if (activeBookings.length > 0) {
     throw new AppError(403, "Vehicle had active booking!");
   }
   const result = await pool.query(`DELETE FROM vehicles WHERE id=$1`, [id]);
