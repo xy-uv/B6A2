@@ -16,6 +16,10 @@ const insert = async (payload: Record<string, unknown>) => {
     throw new AppError(400, "Vehicle not found!");
   }
   const vehicle = vehicleResult.rows[0];
+
+  if (vehicle.availability_status === "booked") {
+    throw new AppError(400, "Vehicle already booked!");
+  }
   const total_price = rented_day * Number(vehicle.daily_rent_price);
   if (total_price <= 0) {
     throw new AppError(
@@ -24,14 +28,33 @@ const insert = async (payload: Record<string, unknown>) => {
     );
   }
   const result = await pool.query(
-    `INSERT INTO bookings(customer_id,vehicle_id,rent_start_date,rent_end_date,total_price) VALUES($1,$2,$3,$4,$5) RETURNING *`,
+    `
+    INSERT INTO bookings (
+    customer_id,
+    vehicle_id,
+    rent_start_date,
+    rent_end_date,
+    total_price)
+    VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5)
+    RETURNING *
+    `,
     [customer_id, vehicle_id, rent_start_date, rent_end_date, total_price]
+  );
+
+  const vehicleStatus = await pool.query(
+    `UPDATE vehicles SET availability_status='booked' WHERE id=$1 RETURNING *`,
+    [vehicle_id]
   );
   return {
     ...result.rows[0],
     vehicle: {
-      vehicle_name: vehicle.vehicle_name,
-      daily_rent_price: vehicle.daily_rent_price,
+      vehicle_name: vehicleStatus.rows[0].vehicle_name,
+      daily_rent_price: vehicleStatus.rows[0].daily_rent_price,
     },
   };
 };
