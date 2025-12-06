@@ -32,4 +32,13 @@ const retrieve = asyncHandler(async (req, res) => {
   });
 });
 
-export const VehiclesControllers = { insert, retrieves, retrieve };
+const modify = asyncHandler(async (req, res) => {
+  const result = await VehiclesServices.modify(req.params.vehicleId!, req.body);
+  reply(res, {
+    statusCode: 200,
+    message: "Vehicle updated successfully",
+    data: result.rows[0],
+  });
+});
+
+export const VehiclesControllers = { insert, retrieves, retrieve, modify };
