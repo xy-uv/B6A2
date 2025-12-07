@@ -61,6 +61,24 @@ const insert = async (payload: Record<string, unknown>) => {
 };
 
 const retrieves = async (user: Record<string, unknown>) => {
+  //? Auto return logics
+  await pool.query(`
+    UPDATE bookings
+    SET status = 'returned'
+    WHERE status != 'returned'
+      AND rent_end_date < NOW();
+  `);
+  await pool.query(`
+    UPDATE vehicles
+    SET availability_status = 'available'
+    WHERE id IN (
+      SELECT vehicle_id
+      FROM bookings
+      WHERE rent_end_date < NOW()
+        AND status = 'returned'
+    );
+  `);
+
   let result;
   if (user.role === ROLE.customer) {
     const bookings = await pool.query(`

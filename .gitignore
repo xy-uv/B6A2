@@ -185,3 +185,4 @@ ntuser.dat*
 *.tsbuildinfo
 node_modules/
 dist/
+.vercel
