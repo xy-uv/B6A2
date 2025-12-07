@@ -5,7 +5,7 @@ import { ROLE } from "../auth/auth.constrain";
 
 const router = Router();
 
-router.post("/", BookingsControllers.insert);
+router.post("/", auth(ROLE.admin, ROLE.customer), BookingsControllers.insert);
 router.get("/", auth(ROLE.admin, ROLE.customer), BookingsControllers.retrieves);
 router.put(
   "/:bookingId",

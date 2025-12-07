@@ -5,13 +5,18 @@ import { ROLE } from "../auth/auth.constrain";
 
 const router = Router();
 
-router.get("/", UserControllers.retrieves);
+router.get("/", auth(ROLE.admin), UserControllers.retrieves);
 router.get(
   "/:userId",
-  // auth(ROLE.admin, ROLE.customer),
-  // isOwnership(),
+  auth(ROLE.admin, ROLE.customer),
+  isOwnership(),
   UserControllers.retrieve
 );
-router.put("/:userId", UserControllers.modify);
+router.put(
+  "/:userId",
+  auth(ROLE.admin, ROLE.customer),
+  isOwnership(),
+  UserControllers.modify
+);
 router.delete("/:userId", UserControllers.destroy);
 export const UserRouter = router;
