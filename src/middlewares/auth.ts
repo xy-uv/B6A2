@@ -3,6 +3,7 @@ import AppError from "../utils/app_error";
 import { jwts } from "../utils/jwts";
 import variables from "../config";
 import { JwtPayload } from "jsonwebtoken";
+import { ROLE } from "../modules/auth/auth.constrain";
 
 const auth = (...roles: string[]) => {
   return async (req: Request, _res: Response, next: NextFunction) => {
@@ -46,7 +47,7 @@ const auth = (...roles: string[]) => {
 
 export const isOwnership = () => {
   return (req: Request, _res: Response, next: NextFunction) => {
-    const isCustomer = req.user?.role === "customer";
+    const isCustomer = req.user?.role === ROLE.customer;
     const isOwner = req.params.userId == req.user?.id;
 
     if (isCustomer && !isOwner) {
